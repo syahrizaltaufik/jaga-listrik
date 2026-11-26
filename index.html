@@ -1564,7 +1564,7 @@ function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&am
 function withTimeout(p,ms){return Promise.race([p,new Promise(function(r){setTimeout(function(){r(undefined)},ms)})])}
 
 /* ---------- Backend Firebase (login email/password, tanpa akun Claude) ---------- */
-var FBCFG={apiKey:'',projectId:''};
+var FBCFG={apiKey:'AIzaSyAfgXEoJzgBI5J-Vk5fnblfRzGgemqCPQ4',projectId:'jaga-listrik'};
 var FBK='jln-fb';
 function fbOn(){return !!(FBCFG.apiKey&&FBCFG.projectId)}
 function fbLoad(){try{return JSON.parse(localStorage.getItem(FBK)||'null')}catch(e){return null}}
