@@ -396,7 +396,7 @@ function dateStr(day){var d=dateOf(day);return DAYS[d.getUTCDay()]+', '+d.getUTC
 function gauss(){return(R()+R()+R()-1.5)/.5}
 function infl(){return 1}
 function fmM(m){var a=Math.abs(m),s=m<0&&a>=5e-7?'\u2212':'',f=function(x){return x.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2})};return s+(a>=1000?f(a/1000)+' T':a>=1?f(a)+' M':a>=.001?f(a*1000)+' Jt':a>=5e-7?f(a*1e6)+' rb':'0,00 M')}
-function note(text,kind,player){if(S.wk&&kind!=='maint'&&S.wk.ev.length<14)S.wk.ev.push({d:S.day,t:text,k:kind||'info'});S.log.unshift({day:S.day,text:text,kind:kind||'info'});if(S.log.length>150)S.log.pop();S.fresh.push({text:text,kind:kind||'info'})}
+function note(text,kind,player){if(S.wk&&kind!=='maint'&&S.wk.ev.length<24)S.wk.ev.push({d:S.day,t:text,k:kind||'info'});S.log.unshift({day:S.day,text:text,kind:kind||'info'});if(S.log.length>150)S.log.pop();S.fresh.push({text:text,kind:kind||'info'})}
 
 /* ---------- Mesin: kapasitas, merek, upgrade, era ---------- */
 var SIZES={
@@ -687,7 +687,7 @@ function dayStep(){
  cs.forEach(function(me){if(!me.h||me.out_&&S.mp&&me.out_<S.day-1)return;var o=ME;ME=me.id;(function(){ S.net30.push(me.net);if(S.net30.length>30)S.net30.shift();S.peak=Math.max(S.peak,me.cash);
  var hh=S.hist,ha=hh.acc,hd=me.d,svt=0;cs.forEach(function(c){svt+=c.servedSum});ha.rev+=hd.rev;ha.fuel+=hd.fuel;ha.fix+=hd.fix;ha.mnt+=hd.mnt;ha.pen+=hd.pen;ha.int+=hd.int;ha.sv+=me.servedSum;ha.tt+=svt;
  if(!S.wk)S.wk=newWk(me.cash);var wk=S.wk;wk.rev+=hd.rev;wk.fuel+=hd.fuel;wk.fix+=hd.fix;wk.mnt+=hd.mnt;wk.pen+=hd.pen;wk.int+=hd.int;wk.sv+=me.servedSum;wk.tt+=svt;wk.days++;S.plants.forEach(function(p){if(p.co===ME)wk.mwh+=(p.last||0)*24});
- if(dateOf(S.day).getUTCDay()===0){var rk2=ranking(),rn2=0;rk2.forEach(function(r,i){if(r.id===ME)rn2=i+1});var dead_=0,old_=0;S.plants.forEach(function(p){if(p.co===ME){if(p.dead)dead_++;else if(wearOf(p)>.6)old_++}});S.weekSum={from:S.day-wk.days+1,to:S.day,rev:wk.rev,fuel:wk.fuel,fix:wk.fix,mnt:wk.mnt,pen:wk.pen,int:wk.int,net:wk.rev-wk.fuel-wk.fix-wk.mnt-wk.pen-wk.int,mwh:wk.mwh,brk:wk.brk,share:wk.tt>0?wk.sv/wk.tt:0,cash0:wk.cash0,cash:me.cash,worth:worth(me),rank:rn2,ev:wk.ev,dead:dead_,old:old_,n:S.plants.filter(function(p){return p.co===ME&&p.bl<=0}).length};S.weekPop=true;S.wk=newWk(me.cash)}
+ if(dateOf(S.day+1).getUTCDate()===1){var rk2=ranking(),rn2=0;rk2.forEach(function(r,i){if(r.id===ME)rn2=i+1});var dead_=0,old_=0;S.plants.forEach(function(p){if(p.co===ME){if(p.dead)dead_++;else if(wearOf(p)>.6)old_++}});S.weekSum={from:S.day-wk.days+1,to:S.day,rev:wk.rev,fuel:wk.fuel,fix:wk.fix,mnt:wk.mnt,pen:wk.pen,int:wk.int,net:wk.rev-wk.fuel-wk.fix-wk.mnt-wk.pen-wk.int,mwh:wk.mwh,brk:wk.brk,share:wk.tt>0?wk.sv/wk.tt:0,cash0:wk.cash0,cash:me.cash,worth:worth(me),rank:rn2,ev:wk.ev,dead:dead_,old:old_,n:S.plants.filter(function(p){return p.co===ME&&p.bl<=0}).length};S.weekPop=true;S.wk=newWk(me.cash)}
  var dn2=dateOf(S.day);if(dateOf(S.day+1).getUTCMonth()!==dn2.getUTCMonth()){var mw_=0,un_=0;S.plants.forEach(function(p){if(p.co===ME&&p.bl<=0){mw_+=ps(p).mw;un_++}});var rk_=ranking(),rn_=0;rk_.forEach(function(r,i){if(r.id===ME)rn_=i+1});
   hh.m.push({y:dn2.getUTCFullYear(),m:dn2.getUTCMonth(),rev:ha.rev,fuel:ha.fuel,fix:ha.fix,mnt:ha.mnt,pen:ha.pen,int:ha.int,net:ha.rev-ha.fuel-ha.fix-ha.mnt-ha.pen-ha.int,cash:me.cash,worth:worth(me),debt:debtTotal(),mw:mw_,units:un_,rank:rn_,share:ha.tt>0?ha.sv/ha.tt:0});
   hh.acc={rev:0,fuel:0,fix:0,mnt:0,pen:0,int:0,sv:0,tt:0}}
@@ -997,6 +997,7 @@ function buildPix(){var mid=document.createElement('canvas');mid.width=PWD*2;mid
  J.ISL.forEach(function(s){mx.beginPath();s.p.forEach(function(q,i){var X=(q[0]-J.L0)/J.LW*PWD,Y=(J.T0-q[1])/J.LH*PHT;i?mx.lineTo(X,Y):mx.moveTo(X,Y)});mx.closePath();mx.fill()});
  var md=mx.getImageData(0,0,PWD,PHT).data,im=pc.getImageData(0,0,PWD,PHT),d=im.data,B=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5],N=PWD*PHT,land=new Uint8Array(N),i,x,y,c;
  for(i=0;i<N;i++)land[i]=md[i*4+3]>127?1:0;
+ WAVES=[];var gs=Math.max(8,Math.round(PWD/46)),jx,jy,ok2,dd;for(y=gs;y<PHT-gs;y+=gs)for(x=gs;x<PWD-gs;x+=gs){jx=x+Math.floor((hash(x,y)-.5)*gs*.8);jy=y+Math.floor((hash(y,x)-.5)*gs*.8);ok2=!land[jy*PWD+jx];for(dd=0;dd<8&&ok2;dd++){var ax=jx+Math.round(Math.cos(dd*.785)*6),ay=jy+Math.round(Math.sin(dd*.785)*6);if(ax<0||ay<0||ax>=PWD||ay>=PHT||land[ay*PWD+ax])ok2=0}if(ok2)WAVES.push({lon:J.L0+jx/PWD*J.LW,lat:J.T0-jy/PHT*J.LH,ph:hash(jx,jy)*6.283,sp:.7+hash(jy,jx)*.6})}
  for(y=0;y<PHT;y++)for(x=0;x<PWD;x++){i=y*PWD+x;var p=i*4,step=land[i]?36:30,th=(B[(y&3)*4+(x&3)]/16-.5)*step*.75;for(c=0;c<3;c++)d[p+c]=Math.max(0,Math.min(255,Math.round((d[p+c]+th)/step)*step))}
  var out=new Uint8ClampedArray(d);
  for(y=1;y<PHT-1;y++)for(x=1;x<PWD-1;x++){i=y*PWD+x;var l=land[i],nb=land[i-1]+land[i+1]+land[i-PWD]+land[i+PWD],q=i*4;
@@ -1065,10 +1066,19 @@ function drawFuel(k,t){var y=J.yNow(),hi=build?J.FKIND[build]:null,ss=7*k*zsc()+
  if(build&&J.FKIND[build]&&hov&&hov.site&&hov.site.ok&&hov.site.fsrc){var f=null;J.FUELSRC.forEach(function(q){if(q[0]===hov.site.fsrc&&q[1]===J.FKIND[build])f=q});if(f){cx.save();cx.setLineDash([5,4]);cx.strokeStyle='#ffd23f';cx.lineWidth=1.6;cx.beginPath();cx.moveTo(hov.x,hov.y);cx.lineTo(px(f[2]),py(f[3]));cx.stroke();cx.restore()}}}
 function fuelHit(mx,my){var y=J.yNow(),best=null,bd=1e9;J.FUELSRC.forEach(function(f){if(f[4]>y)return;var d=Math.hypot(px(f[2])-mx,py(f[3])-my);if(d<Math.max(11,7*(CW/1000)*zsc()+5)&&d<bd){bd=d;best=f}});return best}
 var FNAME={coal:'Tambang batubara',gas:'Ladang gas',oil:'Depot dan kilang BBM'};
+var animT=0,WAVES=[],CLOUDS=null;
+function drawWaves(k){var vl=V.l0-1,vr=V.l0+V.w+1,vt=V.t0+1,vb=V.t0-V.h-1;cx.lineCap='round';cx.lineWidth=Math.max(1.1,2.2*k);
+ for(var i=0;i<WAVES.length;i++){var w=WAVES[i];if(w.lon<vl||w.lon>vr||w.lat>vt||w.lat<vb)continue;var a=animT*w.sp+w.ph,al=Math.sin(a);if(al<.12)continue;var x=px(w.lon)+Math.sin(a*.5)*5*k,y=py(w.lat)+Math.cos(a*.7)*2*k,L=(10+6*al)*k;cx.strokeStyle='rgba(255,255,255,'+(.25+.5*al).toFixed(2)+')';cx.beginPath();cx.moveTo(x-L,y);cx.quadraticCurveTo(x-L/2,y-L*.5,x,y);cx.quadraticCurveTo(x+L/2,y+L*.5,x+L,y);cx.stroke()}}
+function drawClouds(k){if(!CLOUDS){CLOUDS=[];for(var i=0;i<16;i++){var pf=[],n=4+Math.floor(hash(i,7)*3);for(var j=0;j<n;j++)pf.push({dx:(j-n/2)*.55+hash(i,j)*.3,dy:(hash(j,i)-.5)*.3,r:.5+hash(i+3,j)*.5});CLOUDS.push({x0:hash(i,1)*(J.LW+12),lat:J.T0-hash(i,2)*J.LH,s:1.7+hash(i,3)*1.5,v:.010+hash(i,4)*.006,a:.2+hash(i,5)*.12,pf:pf})}}
+ var span=J.LW+12,sh=sx(.4);
+ CLOUDS.forEach(function(c){var lon=J.L0-6+((c.x0+animT*J.LW*c.v)%span),x=px(lon),y=py(c.lat),R=sx(c.s);if(x<-R*4||x>CW+R*4||y<-R*3||y>CH+R*3)return;
+  cx.fillStyle='rgba(20,40,70,.07)';cx.beginPath();c.pf.forEach(function(p){var X=x+p.dx*R+sh,Y=y+p.dy*R+sh*1.3;cx.moveTo(X+p.r*R*.5,Y);cx.arc(X,Y,p.r*R*.5,0,6.283)});cx.fill();
+  cx.fillStyle='rgba(255,255,255,'+c.a.toFixed(2)+')';cx.beginPath();c.pf.forEach(function(p){var X=x+p.dx*R,Y=y+p.dy*R;cx.moveTo(X+p.r*R*.5,Y);cx.arc(X,Y,p.r*R*.5,0,6.283)});cx.fill()})}
 function draw(now){
  var S=J.getState();if(!S)return;
  cx.setTransform(DPR,0,0,DPR,0,0);drawTerr();
  var k=CW/1000,zf=Math.min(1.2,1+.1*(view.z-1));
+ drawWaves(k);drawClouds(k);
  cx.setLineDash([4*k,3*k]);cx.strokeStyle='rgba(120,100,140,.7)';cx.lineWidth=1.1*k;J.BORDERS.forEach(function(b){cx.beginPath();b.forEach(function(q,i){i?cx.lineTo(px(q[0]),py(q[1])):cx.moveTo(px(q[0]),py(q[1]))});cx.stroke()});cx.setLineDash([]);
  var sea='rgba(70,110,150,.8)',land='rgba(95,90,80,.75)';
  if(J.getMap().mode==='story'){labelTxt(cx,'Samudra Hindia',px(99),py(-8.8),13*k,sea);labelTxt(cx,'Laut Jawa',px(111),py(-5),11*k,sea);labelTxt(cx,'Laut Banda',px(129.5),py(-6.3),11*k,sea);labelTxt(cx,'Laut Cina Selatan',px(109),py(5.8),11*k,sea);labelTxt(cx,'Samudra Pasifik',px(136),py(5.5),13*k,sea);labelTxt(cx,'Laut Arafura',px(135.5),py(-9.6),11*k,sea);
@@ -1105,6 +1115,7 @@ function draw(now){
 function loop(now){if(!loop.last)loop.last=now;var dt=Math.min(250,now-loop.last);loop.last=now;
  if(J.getState()&&J.getState().mp){if(window.ONL&&ONL.on){var d0=J.getState().day;ONL.tick();if(J.getState().day!==d0&&!ONL.catching)afterDay()}}
  else if(!paused&&J.getState()&&!J.getState().over){loop.acc=(loop.acc||0)+dt*spd;var n=0;while(loop.acc>=1000&&n<40&&!paused){loop.acc-=1000;J.dayStep();n++;afterDay()}}
+ var gs_=J.getState();if(!paused&&gs_&&!gs_.over&&!(gs_.mp&&window.ONL&&ONL.catching))animT+=dt/1000*(spd>=8?2.2:spd>=4?1.8:spd>=2?1.4:1);
  if(n_ready){if(!loop.fr||now-loop.fr>30){loop.fr=now;draw(now)}}
  requestAnimationFrame(loop)}
 var n_ready=false;
@@ -1201,15 +1212,15 @@ function renderLedger(){var S=J.getState(),me=S.cos[J.me()],hs=S.hist,ms=hs.m,a=
 function eraLine(){var y=Math.floor(J.yNow()),o=[];J.TKEYS.forEach(function(k){if(!J.typeOpen(k,y))o.push(T[k].n.split(' ')[0]+' '+J.TUNLOCK[k])});return 'Tahun '+y+'. '+(o.length?'Belum tersedia: '+o.join(', ')+'.':'Semua jenis pembangkit sudah tersedia.')}
 
 
-/* ---------- Ringkasan mingguan, simpan ---------- */
+/* ---------- Laporan bulanan, simpan ---------- */
 var prevSpd=1;
 function fmE(mwh){return mwh>=1000?(mwh/1000).toFixed(2).replace('.',',')+' GWh':Math.round(mwh).toLocaleString('id-ID')+' MWh'}
 function sgn(v){return (v<0&&Math.abs(v)>=.05?'−':'')+fm(Math.abs(v))}
-function showWeek(w){var cost=w.fuel+w.fix+w.mnt+w.pen+w.int,days=w.to-w.from+1,h='<div class="mbox wbox"><div class="tn">Ringkasan minggu'+(days<7?' (awal, '+days+' hari)':'')+'</div><h2>'+J.dateStr(w.from)+' – '+J.dateStr(w.to)+'</h2>';
+function showWeek(w){var cost=w.fuel+w.fix+w.mnt+w.pen+w.int,days=w.to-w.from+1,h='<div class="mbox wbox"><div class="tn">Laporan bulanan'+(days<27?' (awal, '+days+' hari)':'')+'</div><h2>'+J.dateStr(w.from)+' – '+J.dateStr(w.to)+'</h2>';
  h+='<div class="bsum"><div><span>Pendapatan</span><b>'+fm(w.rev)+'</b></div><div><span>Total biaya</span><b>'+fm(cost)+'</b></div><div><span>Laba bersih</span><b class="'+(w.net<0?'bad':'ok')+'">'+sgn(w.net)+'</b></div><div><span>Kas akhir</span><b class="'+(w.cash<0?'bad':'')+'">'+sgn(w.cash)+'</b></div></div>';
- h+='<table class="tbl"><tbody><tr><td>Bahan bakar</td><td class="r">'+fm(w.fuel)+'</td></tr><tr><td>Biaya tetap</td><td class="r">'+fm(w.fix)+'</td></tr><tr><td>Perawatan dan upgrade</td><td class="r">'+fm(w.mnt)+'</td></tr><tr><td>Denda dan pajak</td><td class="r">'+fm(w.pen)+'</td></tr><tr><td>Bunga</td><td class="r">'+fm(w.int)+'</td></tr><tr class="tot"><td>Energi terjual</td><td class="r">'+fmE(w.mwh)+'</td></tr><tr><td>Pangsa pasar</td><td class="r">'+Math.round(w.share*100)+'%</td></tr><tr><td>Peringkat kekayaan</td><td class="r">#'+w.rank+' dari 4</td></tr><tr><td>Perubahan kas minggu ini</td><td class="r '+(w.cash-w.cash0<0?'bad':'ok')+'">'+sgn(w.cash-w.cash0)+'</td></tr></tbody></table>';
- if(w.dead||w.old||w.brk){h+='<div class="wal">';if(w.dead)h+='<div class="bad">'+w.dead+' mesin rusak total menunggu keputusan Anda.</div>';if(w.brk&&!w.dead)h+='<div class="warn">'+w.brk+' gangguan mesin minggu ini.</div>';if(w.old)h+='<div class="warn">'+w.old+' mesin kondisinya di bawah 40%.</div>';h+='</div>'}
- if(w.ev.length){h+='<h4>Kejadian minggu ini</h4><ul class="wev">';w.ev.slice(0,8).forEach(function(e){h+='<li class="'+e.k+'"><b>'+J.dateStr(e.d).split(',')[0]+'</b> '+esc(e.t)+'</li>'});h+='</ul>'}
+ h+='<table class="tbl"><tbody><tr><td>Bahan bakar</td><td class="r">'+fm(w.fuel)+'</td></tr><tr><td>Biaya tetap</td><td class="r">'+fm(w.fix)+'</td></tr><tr><td>Perawatan dan upgrade</td><td class="r">'+fm(w.mnt)+'</td></tr><tr><td>Denda dan pajak</td><td class="r">'+fm(w.pen)+'</td></tr><tr><td>Bunga</td><td class="r">'+fm(w.int)+'</td></tr><tr class="tot"><td>Energi terjual</td><td class="r">'+fmE(w.mwh)+'</td></tr><tr><td>Pangsa pasar</td><td class="r">'+Math.round(w.share*100)+'%</td></tr><tr><td>Peringkat kekayaan</td><td class="r">#'+w.rank+' dari '+J.getState().cos.length+'</td></tr><tr><td>Perubahan kas bulan ini</td><td class="r '+(w.cash-w.cash0<0?'bad':'ok')+'">'+sgn(w.cash-w.cash0)+'</td></tr></tbody></table>';
+ if(w.dead||w.old||w.brk){h+='<div class="wal">';if(w.dead)h+='<div class="bad">'+w.dead+' mesin rusak total menunggu keputusan Anda.</div>';if(w.brk&&!w.dead)h+='<div class="warn">'+w.brk+' gangguan mesin bulan ini.</div>';if(w.old)h+='<div class="warn">'+w.old+' mesin kondisinya di bawah 40%.</div>';h+='</div>'}
+ if(w.ev.length){h+='<h4>Kejadian bulan ini</h4><ul class="wev">';w.ev.slice(0,12).forEach(function(e){h+='<li class="'+e.k+'"><b>'+J.dateStr(e.d).split(',')[0]+'</b> '+esc(e.t)+'</li>'});h+='</ul>'}
  h+='<div class="cb"><button class="btn ghost" data-act="wkAssets">Lihat aset</button><button class="btn" data-act="wkGo">Lanjutkan</button></div></div>';
  $('wmodal').innerHTML=h;$('wmodal').className='show'}
 function closeWeek(go){$('wmodal').className='';if(go)setSpeed(prevSpd)}
